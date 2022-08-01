@@ -9,8 +9,6 @@ except Exception:
 from django.conf import settings
 import uuid
 
-
-# Instructor model
 class Instructor(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -22,8 +20,6 @@ class Instructor(models.Model):
     def __str__(self):
         return self.user.username
 
-
-# Learner model
 class Learner(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -51,8 +47,6 @@ class Learner(models.Model):
         return self.user.username + "," + \
                self.occupation
 
-
-# Course model
 class Course(models.Model):
     name = models.CharField(null=False, max_length=30, default='online course')
     image = models.ImageField(upload_to='course_images/')
@@ -67,16 +61,12 @@ class Course(models.Model):
         return "Name: " + self.name + "," + \
                "Description: " + self.description
 
-
-# Lesson model
 class Lesson(models.Model):
     title = models.CharField(max_length=200, default="title")
     order = models.IntegerField(default=0)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     content = models.TextField()
 
-
-# Enrollment model
 class Enrollment(models.Model):
     AUDIT = 'audit'
     HONOR = 'honor'
@@ -97,16 +87,10 @@ class Question(models.Model):
     question_text = models.CharField(null=False, max_length=200,)
     questions = models.ForeignKey(Course, on_delete=models.CASCADE)
 
-    # <HINT> A sample model method to calculate if learner get the score of the question
-
-
-#  <HINT> Create a Choice Model with:
 class Choice(models.Model):
     question_id = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
     is_correct = models.BooleanField(default=False)
-
-# <HINT> The submission model
 
 class Submission(models.Model):
     enrollement_id = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
