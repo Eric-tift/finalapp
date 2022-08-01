@@ -7,10 +7,7 @@ from django.urls import reverse
 from django.views import generic
 from django.contrib.auth import login, logout, authenticate
 import logging
-# Get an instance of a logger
 logger = logging.getLogger(__name__)
-# Create your views here.
-
 
 def registration_request(request):
     context = {}
@@ -36,7 +33,6 @@ def registration_request(request):
             context['message'] = "User already exists."
             return render(request, 'onlinecourse/user_registration_bootstrap.html', context)
 
-
 def login_request(request):
     context = {}
     if request.method == "POST":
@@ -52,11 +48,9 @@ def login_request(request):
     else:
         return render(request, 'onlinecourse/user_login_bootstrap.html', context)
 
-
 def logout_request(request):
     logout(request)
     return redirect('onlinecourse:index')
-
 
 def check_if_enrolled(user, course):
     is_enrolled = False
@@ -66,8 +60,6 @@ def check_if_enrolled(user, course):
             is_enrolled = True
     return is_enrolled
 
-
-# CourseListView
 class CourseListView(generic.ListView):
     template_name = 'onlinecourse/course_list_bootstrap.html'
     context_object_name = 'course_list'
@@ -80,11 +72,9 @@ class CourseListView(generic.ListView):
                 course.is_enrolled = check_if_enrolled(user, course)
         return courses
 
-
 class CourseDetailView(generic.DetailView):
     model = Course
     template_name = 'onlinecourse/course_detail_bootstrap.html'
-
 
 def enroll(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
@@ -125,11 +115,11 @@ def extract_answers(request):
 def show_exam_result(request, course_id, submission_id):
     course  =  get_object_or_404(Course, pk=course_id)
     submission =      get_object_or_404(Submission, pk=submission_id)
-    total =  0
     total_user =  0
-    q_results = {}
     c_submits = {}
+    total =  0
     c_results = {}
+    q_results = {}
     for q in course.question_set.all():
         q_total = 0
         q_total_user = 0
@@ -147,15 +137,12 @@ def show_exam_result(request, course_id, submission_id):
         total += q.grade 
         total_user  += q_results[q.id]
     context  = {}
-    context["course"]  =  course
-    context["submission"]  =  submission
-    context["total"]  =  total
-    context["total_user"]  =  total_user
-    context["q_results"]  =  q_results
-    context["c_submits"]  =  c_submits
-    context["c_results"]  =  c_results
+    context["total"]  =total
+    context["total_user"]  =total_user
+    context["q_results"]  =q_results
+    context["course"]  =course
+    context["c_results"]  =c_results
     context["grade"]  =  int((total_user/total)*100)
+    context["submission"]  =submission
+    context["c_submits"]  =c_submits
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
-
-
-
