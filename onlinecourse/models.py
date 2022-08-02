@@ -84,7 +84,7 @@ class Enrollment(models.Model):
 
 
 class Question(models.Model):
-    question_text = models.CharField(null=False, max_length=200,)
+    question_text = models.CharField(max_length=150, null=False)
     questions = models.ForeignKey(Course, on_delete=models.CASCADE)
 
 class Choice(models.Model):
